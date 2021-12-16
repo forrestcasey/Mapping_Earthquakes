@@ -2,7 +2,7 @@
 console.log("working");
 
 // Create the map object with a center and zoom level.
-let map = L.map('mapid').setView([34.0522, -118.2437], 15);
+let map = L.map('mapid').setView([34.0522, -118.2437], 4);
 
 // Create the map object with a center and zoom level.
 // let map = L.map("mapid", {
@@ -18,14 +18,30 @@ L.circle([34.0522, -118.2437], {
   fillColor: '#ffffa1'
 }).addTo(map);
  
+// Get data from cities.js
+let cityData = cities;
 
-  //  13.4.1 -- Add a marker to the map for Los Angeles, California.
-let marker = L.marker([34.0522, -118.2437]).addTo(map);
+// Loop through the cities array and create one marker for each city(forEach loop)
+// This is one method
+cityData.forEach(function(city) {
+  console.log(city)
+  //  Now, add each city's location to the map by adding the location to the marker() function:
+  L.circleMarker(city.location, {
+    radius: city.population/100000
+  })
+  .bindPopup("<h2>" + city.city + ", " + city.state + "</h2> <hr> <h3>Population " + city.population.toLocaleString() + "</h3>")
+  .addTo(map);
+ });
 
+
+
+
+//  This is another method to iterate through the array(regular for loop):
+// for (let i = 0; i < cities.length; i++)
 
 
 // We create the tile layer that will be the background of our map.
-let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}', {
 attribution: 'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
     maxZoom: 18,
     accessToken: API_KEY
